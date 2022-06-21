@@ -1,13 +1,17 @@
 import StepZilla from "react-stepzilla";
+import Step1 from "./Step1";
+
+import './MultiStepForm.css';
+import Step2 from "./Step2";
 
 const MultiStepForm = () => {
   const steps =
     [
-      {name: 'Step 1', component: <Step1 />},
-      {name: 'Step 2', component: <Step2 />},
-      {name: 'Step 3', component: <Step3 />},
-      {name: 'Step 4', component: <Step4 />},
-      {name: 'Step 5', component: <Step5 />}
+      {name: 'Select file', component: <Step1 />},
+      {name: 'Select upload type', component: <Step2 />},
+      // {name: 'Step 3', component: <Step3 />},
+      // {name: 'Step 4', component: <Step4 />},
+      // {name: 'Step 5', component: <Step5 />}
     ]
   return (
     <div className='step-progress'>
