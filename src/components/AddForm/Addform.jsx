@@ -1,4 +1,4 @@
-import "../add-form/add-form.css";
+import "./add-form.css";
 
 const AddForm = () => {
   return (
