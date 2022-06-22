@@ -1,3 +1,5 @@
+import React from 'react'
+
 import "./add-form.css";
 
 const AddForm = () => {
