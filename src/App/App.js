@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
-import AddForm from "../components/AddForm";
+// import AddForm from "../components/AddForm";
 
 import "./App.css";
 import Form from "../Form";
