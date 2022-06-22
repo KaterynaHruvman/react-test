@@ -15,29 +15,30 @@ const Form = () => {
         number: enteredNumber,
         file: selectedFile,
     },
-    onSubmit: (values) => {
-      // console.log(values);
-      // const formData = new FormData();
-      // const data = { ...values };
-      // formData.append("name", fullName);
-      // formData.append("number", enteredNumber);
-      // formData.append("file", selectedFile);
+    onSubmit: async (values) => {
+      console.log(values);
+      const formData = new FormData();
+      for (let value in values) {
+        formData.append(value, values[value]);
+      }
+      axios.post("http://127.0.0.1:8000/api/test_app/", formData).then((res) => {
+        console.log(res);
+      });
 
-      try {
-        const response = axios({
-          method: "post",
-          url: "http://127.0.0.1:8000/api/test_app/ ",
-          data: {
-            name: fullName,
-            number: +enteredNumber,
-            file: selectedFile
-          },
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        console.log(response);
-      } catch(error) {
-         console.log(error)
-        }
+      // try {
+      //   const response = await axios({
+      //     method: "post",
+      //     url: "http://127.0.0.1:8000/api/test_app/",
+      //     data: {
+      //       name: fullName,
+      //       number: +enteredNumber,
+      //       file: selectedFile
+      //     }
+      //   });
+      //   console.log(response);
+      // } catch(error) {
+      //    console.log(error)
+      //   }
       console.log(selectedFile)
     },
 });
@@ -49,12 +50,14 @@ const Form = () => {
   }
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
       <input 
         type="file"         
         id="file"
         name="file"
-        onChange={handleFileSelect}/>
+        accept='image/*'
+        onChange={(e) => formik.setFieldValue('file', e.currentTarget.files[0])}
+      />
 
       <input 
         id="name"
