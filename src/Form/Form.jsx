@@ -6,7 +6,9 @@ const Form = () => {
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [fullName, setFullName] = React.useState("");
   const [enteredNumber, setEnteredNumber] = React.useState("");
-
+  const [uploadTry, setUploadTry] = React.useState(false);
+  const [uploadMesssage, setUploadMesssage] = React.useState("");
+  
   const formik = useFormik({
     enableReinitialize: true,
     // validationSchema: validate,
@@ -19,28 +21,39 @@ const Form = () => {
       console.log(values);
       const formData = new FormData();
       for (let value in values) {
-        formData.append(value, values[value]);
+        formData.append(value, values[value]);        
       }
       axios.post("http://127.0.0.1:8000/api/test_app/", formData).then((res) => {
-        console.log(res);
+        setUploadTry(true)
+        console.log(res.status);
+        if (res.status === 201) {          
+          setUploadMesssage("File was successfully uploaded!")
+        }
+      
+      }).catch((error) => {
+        console.log(error.response.statusText);
+        if (error.response.status === 422) {          
+          setUploadMesssage(error.response.statusText) 
+        }
       });
+      
 
-      // try {
-      //   const response = await axios({
-      //     method: "post",
-      //     url: "http://127.0.0.1:8000/api/test_app/",
-      //     data: {
-      //       name: fullName,
-      //       number: +enteredNumber,
-      //       file: selectedFile
-      //     }
-      //   });
-      //   console.log(response);
-      // } catch(error) {
-      //    console.log(error)
-      //   }
-      console.log(selectedFile)
-    },
+    //   try {
+    //     const response = await axios({
+    //       method: "post",
+    //       url: "http://127.0.0.1:8000/api/test_app/",
+    //       data: {
+    //         name: formik.values.name,
+    //         number: formik.values.number,
+    //         file: formik.values.file
+    //       }
+    //     });
+    //     console.log(response);
+    //   } catch(error) {
+    //      console.log(error)
+    //     }
+      
+  },
 });
 
 
@@ -81,6 +94,7 @@ const Form = () => {
       />
 
       <input type="submit" value="Upload File" />
+      {uploadTry? <span>{uploadMesssage}</span> : null}
     </form>
   )
 };
