@@ -1,6 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
+
+import './Form'
+
 const Form = () => {
   // a local state to store the currently selected file.
   const [selectedFile, setSelectedFile] = React.useState(null);
@@ -23,7 +26,7 @@ const Form = () => {
       for (let value in values) {
         formData.append(value, values[value]);        
       }
-      axios.post("http://127.0.0.1:8000/api/test_app/", formData).then((res) => {
+      axios.post("http://127.0.0.1:8000/file_upload/", formData).then((res) => {
         setUploadTry(true)
         console.log(res.status);
         if (res.status === 201) {          
@@ -31,7 +34,7 @@ const Form = () => {
         }
       
       }).catch((error) => {
-        console.log(error.response.statusText);
+        console.log(error);
         if (error.response.status === 422) {          
           setUploadMesssage(error.response.statusText) 
         }
@@ -68,7 +71,7 @@ const Form = () => {
         type="file"         
         id="file"
         name="file"
-        accept='image/*'
+        // accept='image/*'
         onChange={(e) => formik.setFieldValue('file', e.currentTarget.files[0])}
       />
 

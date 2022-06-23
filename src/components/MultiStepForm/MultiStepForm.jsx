@@ -1,24 +1,21 @@
-import StepZilla from "react-stepzilla";
-import Step1 from "./Step1";
+import React, { useContext, createContext, useState,  useEffect } from "react";
+import Step from "../Step/Step";
+import Stepper from "../Stepper";
 
-import './MultiStepForm.css';
-import Step2 from "./Step2";
+export const FormContext = createContext();
+
 
 const MultiStepForm = () => {
-  const steps =
-    [
-      {name: 'Select file', component: <Step1 />},
-      {name: 'Select upload type', component: <Step2 />},
-      // {name: 'Step 3', component: <Step3 />},
-      // {name: 'Step 4', component: <Step4 />},
-      // {name: 'Step 5', component: <Step5 />}
-    ]
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [formData, setFormData] = useState({});
+
   return (
-    <div className='step-progress'>
-        <StepZilla steps={steps}/>
-    </div>
+    <FormContext.Provider value={{ activeStepIndex, setActiveStepIndex, formData, setFormData }}>
+     <Stepper />
+     <Step />
+    </FormContext.Provider>
    
   )
-}
+};
 
-export default MultiStepForm
+export default MultiStepForm;
