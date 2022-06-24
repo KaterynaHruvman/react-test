@@ -2,7 +2,9 @@ import React, { useContext } from "react";
 import { ErrorMessage, Field, Form, Formik, useFormik } from "formik";
 import axios from 'axios';
 import * as yup from "yup";
-import { FormContext } from "../MultiStepForm/MultiStepForm";
+import { FormContext } from "../../MultiStepForm/MultiStepForm";
+
+import styles from "./UploadFile.module.css";
 
 const UploadFile = () => {
   const { activeStepIndex, setActiveStepIndex, formData, setFormData } = useContext(FormContext);
@@ -48,20 +50,23 @@ const formik = useFormik({
   },
 });
   return (
-    <Formik>
-    <Form className="flex flex-col justify-center items-center"onSubmit={formik.handleSubmit} encType="multipart/form-data">
-      <div className="text-2xl font-medium self-center mb-2">Welcome!</div>
-      <div className="flex flex-col items-start mb-2">
-        <label className="font-medium text-gray-900">Select .xlsx file</label>
-        <Field
+    <form className={styles.dragNdropForm} onSubmit={formik.handleSubmit} encType="multipart/form-data">
+      <div className={styles.dragNdropWrapper}>
+        <input 
           type="file"         
           id="file"
           name="file"
-          // accept='image/*'
+          className={styles.inputFileUpload}
           onChange={(e) => formik.setFieldValue('file', e.currentTarget.files[0])}
         />
+        <label id="labelFileUpload" htmlFor="file">
+          <div>
+            <p>Drag and drop your file here or</p>
+            <button className="upload-button">Upload a file</button>
+          </div> 
+        </label>
       </div>
-      <ErrorMessage name="file" render={renderError} />
+   
        
       <button
         className="rounded-md bg-indigo-500 font-medium text-white my-2 p-2"
@@ -69,8 +74,8 @@ const formik = useFormik({
       >
         next
       </button>
-    </Form>
-    </Formik>
+    </form>
+   
   );
 };
 

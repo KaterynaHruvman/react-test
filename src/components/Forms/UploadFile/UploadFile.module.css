@@ -1,0 +1,23 @@
+.dragNdropForm {  
+  padding: 0 20px;
+  width: calc( 100% * 2/3);
+  margin: 0 auto;
+}
+
+.dragNdropWrapper {
+  display: flex;
+  padding: 30px;
+  justify-content: center;
+  
+  
+  margin-top: 40px;
+  max-width: 100%;
+  text-align: center;
+  
+  border: dashed 2px #2782C1;
+}
+
+
+.inputFileUpload {
+  display: none;
+}

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { FormContext } from "../MultiStepForm/MultiStepForm";
-import UploadFile from "../Forms";
+import UploadFile from "../Forms/UploadFile/UploadFile";
+import UploadKey from "../Forms/UploadKey";
 
 
 function Step() {
@@ -11,7 +12,7 @@ function Step() {
       stepContent = <UploadFile />;
       break;
     case 1:
-      // stepContent = <Workspace />;
+      stepContent = <UploadKey />;
       break;
     case 2:
       // stepContent = <Success />;
