@@ -49,9 +49,24 @@ const formik = useFormik({
     });
   },
 });
+
+const [dragActive, setDragActive] = React.useState(false);
+  
+  // handle drag events
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(e.type);
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
   return (
-    <form className={styles.dragNdropForm} onSubmit={formik.handleSubmit} encType="multipart/form-data">
-      <div className={styles.dragNdropWrapper}>
+    <form className={styles.dragNdropForm} onSubmit={(e) => e.preventDefault()} encType="multipart/form-data">
+      <div className={dragActive ? styles.dragNdropWrapperActive : styles.dragNdropWrapper}  onDragEnter={handleDrag} onDragLeave={handleDrag}>
         <input 
           type="file"         
           id="file"
@@ -62,18 +77,25 @@ const formik = useFormik({
         <label id="labelFileUpload" htmlFor="file">
           <div>
             <p>Drag and drop your file here or</p>
-            <button className="upload-button">Upload a file</button>
+            <button className={styles.uploadButton}>Upload a file</button>
           </div> 
         </label>
       </div>
    
-       
-      <button
-        className="rounded-md bg-indigo-500 font-medium text-white my-2 p-2"
-        type="submit"
-      >
-        next
-      </button>
+      <div className={styles.buttonsWrapper}>
+        <button
+          className={styles.button}
+          type="submit"          
+        >
+          back
+        </button>
+        <button
+          className={styles.button}
+          type="submit"          
+        >
+          next
+        </button>
+      </div> 
     </form>
    
   );
