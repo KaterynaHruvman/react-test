@@ -1,14 +1,8 @@
-.dragNdropForm {  
-  padding: 0 20px;
-  width: calc( 100% * 2/3);
-  margin: 0 auto;
-}
-
 .dragNdropWrapper {
   display: flex;
   padding: 50px;
   justify-content: center;  
-  margin-top: 40px;
+  /* margin-top: 40px; */
   max-width: 100%;
   text-align: center;
   background-color: #f1f9ff;
@@ -16,7 +10,7 @@
 }
 
 .dragNdropWrapperActive {
-   display: flex;
+  display: flex;
   padding: 50px;
   justify-content: center;  
   margin-top: 40px;
@@ -32,20 +26,5 @@
 
 .uploadButton {
   margin-top: 20px;
-  cursor: pointer;
-}
-
-.buttonsWrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-}
-
-.button {
-  border-style: none;
-  border: solid 2px #006bb6;
-  padding: 10px 20px;
-  background-color: white;
-  color: #006bb6;
   cursor: pointer;
 }

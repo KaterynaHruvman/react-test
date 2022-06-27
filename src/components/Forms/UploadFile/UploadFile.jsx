@@ -1,17 +1,17 @@
 import React, { useContext } from "react";
-import { ErrorMessage, Field, Form, Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import axios from 'axios';
 import * as yup from "yup";
-import { FormContext } from "../../MultiStepForm/MultiStepForm";
-
+import {FormContext} from "../../FormikStepper/FormikStepper";
+import { Card, CardContent } from '@mui/material';
 import styles from "./UploadFile.module.css";
 
 const UploadFile = () => {
-  const { activeStepIndex, setActiveStepIndex, formData, setFormData } = useContext(FormContext);
-  const [selectedFile, setSelectedFile] = React.useState(null);
-  const [uploadTry, setUploadTry] = React.useState(false);
-  const [uploadMesssage, setUploadMesssage] = React.useState("");
-
+  // const { activeStepIndex, setActiveStepIndex, formData, setFormData } = useContext(FormContext);
+  const { step, setStep, selectedFile, setSelectedFile } = useContext(FormContext);
+  
+  const inputRef = React.useRef(null);
+  
   const ValidationSchema = yup.object().shape({
     file: yup.mixed().required('File is required'),
   })
@@ -20,43 +20,19 @@ const UploadFile = () => {
     <p className="italic text-red-600">{message}</p>
   );
 
-const formik = useFormik({
+  const formik = useFormik({
   validationSchema: ValidationSchema,
   initialValues: {
       file: selectedFile,
-  },
-  onSubmit: async (values) => {
-    console.log(values);
-    const data = { ...formData, ...values };
-        setFormData(data);
-        setActiveStepIndex(activeStepIndex + 1);
-    const file = new FormData();
-    for (let value in values) {
-      file.append(value, values[value]);        
-    }
-    axios.post("http://127.0.0.1:8000/file_upload/", file).then((res) => {
-      setUploadTry(true)
-      console.log(res.status);
-      if (res.status === 201) {          
-        setUploadMesssage("File was successfully uploaded!")
-      }
-    
-    }).catch((error) => {
-      console.log(error);
-      if (error.response.status === 422) {          
-        setUploadMesssage(error.response.statusText) 
-      }
-    });
-  },
+  }
 });
 
-const [dragActive, setDragActive] = React.useState(false);
+  const [dragActive, setDragActive] = React.useState(false);
   
   // handle drag events
   const handleDrag = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    console.log(e.type);
+    e.stopPropagation();   
     if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
     } else if (e.type === "dragleave") {
@@ -64,40 +40,77 @@ const [dragActive, setDragActive] = React.useState(false);
     }
   };
 
+  // triggers when file is dropped
+  const handleDrop = async function(e) {  
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {       
+      const file = new FormData();
+      file.append("file", e.dataTransfer.files[0]);     
+    
+      try {
+        const res = await axios.post("http://127.0.0.1:8000/file_upload/", file)
+        formik.setFieldValue('file', e.dataTransfer.files[0]);
+        setSelectedFile(file.get('file'))     
+      } catch (e) {
+        console.log(e);
+      }      
+    }  
+  };
+
+  // triggers when file is selected with click
+  const handleChange = async function(e) {
+    e.preventDefault();
+    if (e.target.files &&e.target.files[0]) {       
+      const file = new FormData();
+      file.append("file", e.target.files[0]);     
+      formik.setFieldValue('file', e.target.files[0]);
+      try {
+        const res = await axios.post("http://127.0.0.1:8000/file_upload/", file)
+        formik.setFieldValue('file', e.target.files[0]);
+        setSelectedFile(file.get('file'))     
+      } catch (e) {
+        console.log(e);
+      }      
+    }  
+  };
+
+  // triggers the input when the button is clicked
+const onButtonClick = () => {
+  inputRef.current.click();
+};
+
+
   return (
-    <form className={styles.dragNdropForm} onSubmit={(e) => e.preventDefault()} encType="multipart/form-data">
-      <div className={dragActive ? styles.dragNdropWrapperActive : styles.dragNdropWrapper}  onDragEnter={handleDrag} onDragLeave={handleDrag}>
-        <input 
-          type="file"         
-          id="file"
-          name="file"
-          className={styles.inputFileUpload}
-          onChange={(e) => formik.setFieldValue('file', e.currentTarget.files[0])}
-        />
-        <label id="labelFileUpload" htmlFor="file">
-          <div>
-            <p>Drag and drop your file here or</p>
-            <button className={styles.uploadButton}>Upload a file</button>
-          </div> 
-        </label>
-      </div>
-   
-      <div className={styles.buttonsWrapper}>
-        <button
-          className={styles.button}
-          type="submit"          
-        >
-          back
-        </button>
-        <button
-          className={styles.button}
-          type="submit"          
-        >
-          next
-        </button>
-      </div> 
-    </form>
-   
+    <Card>
+    <CardContent>
+    <div label="Upload file">
+      <div  className={dragActive ? styles.dragNdropWrapperActive : styles.dragNdropWrapper}  onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
+          <input 
+            ref={inputRef}
+            type="file"         
+            id="file"
+            name="file"
+            className={styles.inputFileUpload}
+            onChange={handleChange}
+          />
+          <label id="labelFileUpload" htmlFor="file">
+            <div>
+              <> 
+            {!selectedFile?                  
+                <p>Drag and drop your file here or</p> :
+                <p>File {selectedFile?.name} was successfully added</p>
+             }   
+                <button type="button"  className={styles.uploadButton} onClick={onButtonClick}>Browse</button>
+              </>               
+           
+            </div> 
+          </label>
+        </div>
+    </div>   
+    </CardContent>
+   </Card>  
   );
 };
 

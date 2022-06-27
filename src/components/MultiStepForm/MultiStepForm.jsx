@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useState,  useEffect } from "react";
-import Step from "../Step/Step";
-import Stepper from "../Stepper";
+// import Step from "../Step/Step";
+// import Stepper from "../Stepper";
 
 export const FormContext = createContext();
 
@@ -11,8 +11,8 @@ const MultiStepForm = () => {
 
   return (
     <FormContext.Provider value={{ activeStepIndex, setActiveStepIndex, formData, setFormData }}>
-     <Stepper />
-     <Step />
+     {/* <Stepper /> */}
+     {/* <Step /> */}
     </FormContext.Provider>
    
   )
