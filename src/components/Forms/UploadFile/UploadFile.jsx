@@ -21,6 +21,7 @@ const UploadFile = () => {
   );
 
   const formik = useFormik({
+  enableReinitialize: false,
   validationSchema: ValidationSchema,
   initialValues: {
       file: selectedFile,
@@ -85,7 +86,7 @@ const onButtonClick = () => {
   return (
     <Card>
     <CardContent>
-    <div label="Upload file">
+    <form label="Upload file" autoComplete='off' onSubmit={(e) => e.preventDefault()}  encType="multipart/form-data">
       <div  className={dragActive ? styles.dragNdropWrapperActive : styles.dragNdropWrapper}  onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
           <input 
             ref={inputRef}
@@ -108,7 +109,7 @@ const onButtonClick = () => {
             </div> 
           </label>
         </div>
-    </div>   
+    </form>   
     </CardContent>
    </Card>  
   );

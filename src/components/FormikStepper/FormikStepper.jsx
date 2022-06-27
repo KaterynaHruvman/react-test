@@ -10,29 +10,41 @@ const FormikStepper = ({children, ...props}) => {
   const childrenArray = React.Children.toArray(children)
   const [step, setStep] = useState(0)
   const [selectedFile, setSelectedFile] = useState(null);
+  
+  const [completed, setCompleted] = useState(false)
   const currentChild = childrenArray[step]
   console.log(props);
  
   function isLastStep () {
     return step === childrenArray.length - 1
   }
-  const formik = useFormik({
- onSubmit:async(values, helpers)=>{
-   console.log("submited");
+//   const formik = useFormik({
+//  onSubmit:async(values, helpers)=>{
+//    console.log("submited");
+//   if(step === childrenArray.length - 1) {
+//     await props.onSubmit(values, helpers)
+//   }else{
+//     setStep(s => s+1)
+//   }
+//  }
+//   });
+const submitHandler = (e) => {
+  e.preventDefault()
   if(step === childrenArray.length - 1) {
-    await props.onSubmit(values, helpers)
-  }else{
-    setStep(s => s+1)
-  }
- }
-  });
-  
-  return (
+        console.log("ok");
+        console.log(props.values);
+        setCompleted(true)
+      }else{
+        setStep(s => s+1)
+      }
+     }
+
+return (
     <FormContext.Provider value={{step, setStep, selectedFile, setSelectedFile}} >
             
-      <Formik {...props} onSubmit={async (values, helpers)=>{
-        console.log("click");       
-        
+      <Formik {...props} onSubmit={async (e, values, helpers)=>{
+        e.preventDefault();
+        console.log(e);       
         if(step === childrenArray.length - 1) {
           await props.onSubmit(values, helpers)
         }else{
@@ -40,11 +52,11 @@ const FormikStepper = ({children, ...props}) => {
         }
         
       }}>
-        <Form className={styles.form} autoComplete='off' onSubmit={(e) => e.preventDefault()}  encType="multipart/form-data">
+        <Form className={styles.form} autoComplete='off' onSubmit={(e) => submitHandler(e)}  encType="multipart/form-data">
         <Box sx={{ width: '100%' }}>
           <Stepper activeStep={step} alternativeLabel>
-            {childrenArray.map((child) => (
-              <Step key={child.props.label}>
+            {childrenArray.map((child, index) => (
+              <Step key={child.props.label} completed={step > index || completed}  >
                 <StepLabel>{child.props.label}</StepLabel>
               </Step>
             ))}
@@ -63,9 +75,9 @@ const FormikStepper = ({children, ...props}) => {
               </button>
               <button
                  className={!selectedFile? styles.buttonNotActive : styles.buttonActive}
-                 type="button" 
-                //  type="submit"
-                 onClick={()=>setStep(s=>s+1)}           
+                //  type="button" 
+                 type="submit"
+                //  onClick={()=>setStep(s=>s+1)}           
               >
                 {isLastStep()? 'submit' : 'next'}
               </button>
