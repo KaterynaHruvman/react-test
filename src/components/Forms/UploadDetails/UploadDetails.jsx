@@ -13,8 +13,9 @@ const Input = styled('input')({
 });
 
 const UploadDetails = () => {
-  const { step, setStep, selectedFile, setSelectedFile } = useContext(FormContext);
+  const { step, setStep, selectedFile, setSelectedFile, selectedKey, setSelectedKey } = useContext(FormContext);
   const inputRef = React.useRef(null);
+
   const ValidationSchema = yup.object().shape({
     host_name: yup.string()
       .max(20, 'Too Long!')
@@ -39,24 +40,23 @@ const UploadDetails = () => {
       password: '',
       key: null,
       upload_path: '/inbox/'
-    },onSubmit: (values)=>{
-      console.log(values);
     }
   });
 
   const handleChange = async function(e) {
     e.preventDefault();
     if (e.target.files &&e.target.files[0]) {       
-      const keyFile = new FormData();
-      keyFile.append("key", e.target.files[0]);     
+      // const keyFile = new FormData();
+      // keyFile.append("key", e.target.files[0]);     
       formik.setFieldValue('key', e.target.files[0]);
-      try {
-        // const res = await axios.post("http://127.0.0.1:8000/file_upload/", file)
-        formik.setFieldValue('key', e.target.files[0]);
-        setSelectedFile(keyFile.get('file'))     
-      } catch (e) {
-        console.log(e);
-      }      
+      setSelectedKey(true)
+      // try {
+      //   const res = await axios.post("http://127.0.0.1:8000/file_upload/", file)
+      //   formik.setFieldValue('key', e.target.files[0]);
+      //   setSelectedFile(keyFile.get('file'))     
+      // } catch (e) {
+      //   console.log(e);
+      // }      
     }  
   };
 
@@ -66,9 +66,13 @@ const onButtonClick = () => {
 };
  
   return (          
-    <Card>
-    <CardContent>
-          <form label="Upload details" autoComplete='off' encType="multipart/form-data">
+       <>
+            <div className={styles.inputWrapper}>
+              <p htmlFor='hostName' >Selected file: {selectedFile.name}</p>
+
+            </div>
+
+
             <div className={styles.inputWrapper}>
               <label htmlFor='hostName' >SFTP host name</label>
               <input name='host_name' id='hostName' value={formik.values.host_name} onChange={formik.handleChange} />
@@ -105,11 +109,11 @@ const onButtonClick = () => {
                 id="key"
                 name="key" 
                 className={styles.keyUpload}          
-                onChange={{handleChange}}
+                onChange={handleChange}
               />
               <div>           
                 <button type="button"  onClick={onButtonClick}>Browse</button> 
-                {!formik.key? <span>file is not selected</span> : <span>key selected</span>}                               
+                {!formik.values.key? <span>file is not selected</span> : <span>{formik.values.key.name}</span>}                               
               </div> 
             </div>      
 
@@ -120,9 +124,7 @@ const onButtonClick = () => {
                <div className={styles.errorMessage}>{formik.errors.upload_path}</div>) : null}
             </div>
             
-          </form>   
-          </CardContent>
-   </Card>            
+          </>
   )
 };
 

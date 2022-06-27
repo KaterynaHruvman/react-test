@@ -49,3 +49,10 @@ p {
   box-sizing: inherit;
 }
 
+
+svg.MuiStepIcon-root.MuiStepIcon-active{
+  color: #006bb6 !important;
+}
+svg.MuiStepIcon-root.MuiStepIcon-completed{
+  color: #006bb6 !important;
+}

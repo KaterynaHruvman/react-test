@@ -6,10 +6,11 @@ import { Button, Card, CardContent } from '@mui/material';
 
 import styles from './StepsForm.module.css'
 
-import FormikStepper from '../FormikStepper';
+
 import UploadFile from '../Forms/UploadFile';
 
 import UploadDetails from '../Forms/UploadDetails/UploadDetails';
+import FormikStepper from '../FormikStepper/FormikStepper';
 
 const StepsForm = () => {
  

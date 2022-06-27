@@ -84,9 +84,7 @@ const onButtonClick = () => {
 
 
   return (
-    <Card>
-    <CardContent>
-    <form label="Upload file" autoComplete='off' onSubmit={(e) => e.preventDefault()}  encType="multipart/form-data">
+    
       <div  className={dragActive ? styles.dragNdropWrapperActive : styles.dragNdropWrapper}  onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
           <input 
             ref={inputRef}
@@ -109,9 +107,7 @@ const onButtonClick = () => {
             </div> 
           </label>
         </div>
-    </form>   
-    </CardContent>
-   </Card>  
+
   );
 };
 
